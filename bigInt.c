@@ -85,22 +85,17 @@ int main()
         convertFromStringToNumberArray(number1, num1);
         convertFromStringToNumberArray(number2, num2);
 
-        for (int i = 2 * N - 1; i >= 0; i--)
-            printf("%d", num1[i]);
-        printf("\n");
-
-        for (int i = 2 * N - 1; i >= 0; i--)
-            printf("%d", num2[i]);
-        printf("\n");
-
+        printf("\nAddition\n");
         int ans[2 * N] = {0}; /* no more overflow issue */
         add(num1, num2, ans);
         printNumber(ans);
 
+        printf("\nSubtraction\n");
         memset(ans, 0, sizeof(ans));
         subtract(num1, num2, ans);
         printNumber(ans);
 
+        printf("\nMultiplication\n");
         memset(ans, 0, sizeof(ans));
         multiply(num1, num2, ans);
         printNumber(ans);
