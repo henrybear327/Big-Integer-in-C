@@ -4,7 +4,7 @@
 
 #define N 40
 
-#define TESTING_MODE 1
+#define TESTING_MODE 0
 
 typedef struct {
     int num[2 * N];
@@ -189,6 +189,7 @@ void multiply(Number *num1, Number *num2, Number *ans)
     isZero(ans);
 }
 
+/* 以下是自動測試代碼 */
 void setNumber(int numberToSet, Number *num)
 {
     // printf("Number to set %d\n", numberToSet);
@@ -337,6 +338,8 @@ void autoTest()
             testDivide();
     }
 }
+
+/* 以上是自動測試代碼 */
 
 void convertFromStringToNumber(char str[], Number *num)
 {
