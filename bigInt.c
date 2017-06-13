@@ -4,6 +4,11 @@
 
 #define N 40
 
+typedef struct {
+    int num[N];
+    int isNegative;
+} Number;
+
 void add(int num1[], int num2[], int ans[])
 {
     for (int i = 0; i < N; i++) {
