@@ -4,6 +4,8 @@
 
 #define N 40
 
+#define TESTING_MODE 1
+
 typedef struct {
     int num[2 * N];
     int isNegative;
@@ -187,6 +189,158 @@ void multiply(Number *num1, Number *num2, Number *ans)
     isZero(ans);
 }
 
+/* 以下是自動測試代碼 */
+void setNumber(int numberToSet, Number *num)
+{
+    // printf("Number to set %d\n", numberToSet);
+
+    if (numberToSet < 0) {
+        num->isNegative = 1;
+        numberToSet *= -1;
+    } else
+        num->isNegative = 0;
+
+    memset(num->num, 0, sizeof(num->num));
+
+    for (int i = 0; numberToSet > 0; i++) {
+        num->num[i] = numberToSet % 10;
+        numberToSet /= 10;
+    }
+
+    // printf("Set result: ");
+    // printNumber(*num);
+    // printf("\n");
+}
+
+int diff(Number correct, Number ans)
+{
+    if (correct.isNegative != ans.isNegative)
+        return 1;
+
+    for (int i = 0; i < 2 * N; i++)
+        if (correct.num[i] != ans.num[i])
+            return 1;
+
+    return 0;
+}
+
+void testAdd()
+{
+    printf("Testing add\n");
+
+    Number num1, num2, ans, correct;
+    for (int i = -1000; i <= 1000; i++) {
+        for (int j = -1000; j <= 1000; j++) {
+            if (abs(i) % 1000 == 0 && abs(j) % 1000 == 0) {
+                printf("Testing %d + %d...\n", i, j);
+            }
+
+            setNumber(i, &num1);
+            setNumber(j, &num2);
+            setNumber(0, &ans);
+
+            setNumber(i + j, &correct);
+
+            add(&num1, &num2, &ans);
+
+            // printf("%d + %d = %d -> ", i, j, i + j);
+            // printNumber(ans);
+
+            if (diff(correct, ans) == 1) {
+                printf("%d + %d = ", i, j);
+                printNumber(correct);
+                printf("!= ");
+                printNumber(ans);
+                exit(1);
+            }
+        }
+    }
+}
+
+void testSubtract()
+{
+    printf("Testing subtract\n");
+
+    Number num1, num2, ans, correct;
+    for (int i = -1000; i <= 1000; i++) {
+        for (int j = -1000; j <= 1000; j++) {
+            if (abs(i) % 1000 == 0 && abs(j) % 1000 == 0) {
+                printf("Testing %d - %d...\n", i, j);
+            }
+
+            setNumber(i, &num1);
+            setNumber(j, &num2);
+            setNumber(0, &ans);
+
+            setNumber(i - j, &correct);
+
+            subtract(&num1, &num2, &ans);
+
+            // printf("%d - %d = %d -> ", i, j, i - j);
+            // printNumber(ans);
+
+            if (diff(correct, ans) == 1) {
+                printf("%d - %d = ", i, j);
+                printNumber(correct);
+                printf("!= ");
+                printNumber(ans);
+                exit(1);
+            }
+        }
+    }
+}
+
+void testMultiply()
+{
+    printf("Testing multiply\n");
+
+    Number num1, num2, ans, correct;
+    for (int i = -1000; i <= 1000; i++) {
+        for (int j = -1000; j <= 1000; j++) {
+            if (abs(i) % 1000 == 0 && abs(j) % 1000 == 0) {
+                printf("Testing %d * %d...\n", i, j);
+            }
+
+            setNumber(i, &num1);
+            setNumber(j, &num2);
+            setNumber(0, &ans);
+
+            setNumber(i * j, &correct);
+
+            multiply(&num1, &num2, &ans);
+
+            // printf("%d - %d = %d -> ", i, j, i - j);
+            // printNumber(ans);
+
+            if (diff(correct, ans) == 1) {
+                printf("%d * %d = ", i, j);
+                printNumber(correct);
+                printf("!= ");
+                printNumber(ans);
+                exit(1);
+            }
+        }
+    }
+}
+
+void testDivide() {}
+
+void autoTest()
+{
+    for (int i = 0; i < 4; i++) {
+        if (i == 0)
+            testAdd();
+        else if (i == 1)
+            testSubtract();
+        else if (i == 2)
+            testMultiply();
+        else
+            testDivide();
+    }
+}
+
+/* 以上是自動測試代碼 */
+
 void convertFromStringToNumber(char str[], Number *num)
 {
     int len = strlen(str);
@@ -204,6 +358,7 @@ void convertFromStringToNumber(char str[], Number *num)
 
 int main()
 {
+#if TESTING_MODE == 0
     char number1[2 * N], number2[2 * N];
     while (scanf("%s %s", number1, number2) != EOF) {
         Number num1, num2, ans;
@@ -233,6 +388,8 @@ int main()
         multiply(&num1, &num2, &ans);
         printNumber(ans);
     }
-
+#else
+    autoTest();
+#endif
     return 0;
 }
